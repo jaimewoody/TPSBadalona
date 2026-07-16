@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galería — TPS BDN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asfalto:#121415; --asfalto-2:#1b1d1f; --linea:#3FD6C4; --linea-2:#72E6D8;
+    --maillot:#C1272D; --blanco:#F2F2F0; --gris:#8a8d90; --borde:#303234;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--asfalto); color:var(--blanco); font-family:'Work Sans', sans-serif; line-height:1.5;}
+  h1,h2,h3{font-family:'Oswald', sans-serif; text-transform:uppercase; letter-spacing:0.02em;}
+  a{color:inherit; text-decoration:none;}
+
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(35,37,39,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--borde);
+  }
+  .nav-wrap{max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:16px 24px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-mark{width:38px; height:38px; flex-shrink:0; object-fit:contain;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.05;}
+  .brand span{font-family:'Oswald'; font-weight:700; font-size:1.2rem; letter-spacing:0.04em;}
+  .brand small{font-family:'JetBrains Mono'; font-size:0.62rem; color:var(--linea); letter-spacing:0.12em; text-transform:uppercase;}
+  nav ul{list-style:none; display:flex; gap:28px;}
+  nav a{
+    font-size:0.85rem; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--gris);
+    position:relative; padding-bottom:4px;
+    transition:color .2s ease;
+  }
+  nav a.active, nav a:hover{color:var(--blanco);}
+  nav a::after{content:""; position:absolute; left:0; bottom:0; width:0; height:2px; background:var(--linea); transition:width .25s ease;}
+  nav a:hover::after, nav a.active::after{width:100%;}
+
+  .km{display:flex; align-items:center; gap:14px; margin-bottom:36px;}
+  .km-badge{
+    font-family:'JetBrains Mono'; font-weight:600; font-size:0.75rem;
+    color:var(--asfalto); background:var(--linea);
+    padding:4px 10px; white-space:nowrap;
+  }
+  .km-line{flex:1; height:0; border-top:2px dashed var(--borde);}
+
+  section{max-width:1100px; margin:0 auto; padding:80px 24px;}
+  section h2{font-size:2rem; margin-bottom:8px;}
+  .eyebrow{
+    color:var(--linea); font-family:'JetBrains Mono'; font-size:0.8rem;
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; display:block;
+  }
+  .lede{color:var(--gris); max-width:560px; margin-bottom:32px;}
+
+  .btn{
+    display:inline-block; padding:13px 26px;
+    font-family:'Oswald'; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.04em; font-size:0.9rem;
+    border:1px solid var(--blanco); transition:all .2s ease;
+  }
+  .btn-fill{background:var(--linea); border-color:var(--linea); color:var(--asfalto);}
+  .btn-fill:hover{background:var(--linea-2); border-color:var(--linea-2);}
+  .ig-banner{margin-bottom:48px;}
+
+  .galeria-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); grid-auto-rows:180px; gap:6px;
+  }
+  .foto{
+    background:linear-gradient(135deg, var(--asfalto-2), var(--borde));
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gris); font-family:'JetBrains Mono'; font-size:0.75rem;
+    position:relative; overflow:hidden;
+  }
+  .foto.big{grid-column:span 2; grid-row:span 2;}
+  .foto::after{content:""; position:absolute; inset:0; border:1px dashed var(--borde); pointer-events:none;}
+  .foto img{width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(0.1) contrast(1.05);}
+
+  footer{
+    max-width:1100px; margin:0 auto; padding:50px 24px 40px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+    border-top:1px solid var(--borde);
+  }
+  .meta-tag{font-family:'JetBrains Mono'; color:var(--gris); font-size:0.8rem;}
+
+  @media (max-width:800px){
+    nav ul{display:none;}
+    .galeria-grid{grid-template-columns:repeat(2,1fr);}
+    .foto.big{grid-column:span 2; grid-row:span 1;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand">
+      <img class="brand-mark" src="assets/logo.png" alt="Logo TPS BDN">
+      <div class="brand-text">
+        <span>TPS BDN</span>
+        <small>Badalona</small>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="rutas.html">Rutas</a></li>
+        <li><a href="participantes.html">El Pelotón</a></li>
+        <li><a href="galeria.html" class="active">Galería</a></li>
+        <li><a href="index.html#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="galeria">
+  <div class="km"><span class="km-badge">KM 20</span><div class="km-line"></div></div>
+  <span class="eyebrow">Recuerdos de ruta</span>
+  <h2>Fotos · Galería</h2>
+  <p class="lede">Instantáneas de salidas y marchas de la grupeta.</p>
+  <a href="https://www.instagram.com/tps_badalona" target="_blank" rel="noopener" class="btn btn-fill ig-banner">Ver más en Instagram →</a>
+
+  <div class="galeria-grid">
+    <div class="foto big"><img src="assets/grupo-1.jpg" alt="Grupeta TPS BDN en salida de carretera"></div>
+    <div class="foto"><img src="assets/grupo-2.jpg" alt="Grupeta TPS BDN en Granera"></div>
+    <div class="foto"><img src="assets/jose-antonio-accion.jpg" alt="Jose Antonio en ruta"></div>
+    <div class="foto"><img src="assets/jaime-del-bosque-accion.jpg" alt="Jaime Del Bosque en ruta"></div>
+    <div class="foto"><img src="assets/jordi-belda-accion.jpg" alt="Jordi Belda en ruta"></div>
+  </div>
+</section>
+
+<footer>
+  <span class="meta-tag">© 2026 LA GRUPETA — HECHO SOBRE DOS RUEDAS</span>
+</footer>
+
+</body>
+</html>
