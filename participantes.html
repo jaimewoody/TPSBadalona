@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Pelotón — TPS BDN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asfalto:#121415; --asfalto-2:#1b1d1f; --linea:#3FD6C4; --linea-2:#72E6D8;
+    --maillot:#C1272D; --blanco:#F2F2F0; --gris:#8a8d90; --borde:#303234;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--asfalto); color:var(--blanco); font-family:'Work Sans', sans-serif; line-height:1.5;}
+  h1,h2,h3{font-family:'Oswald', sans-serif; text-transform:uppercase; letter-spacing:0.02em;}
+  a{color:inherit; text-decoration:none;}
+
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(35,37,39,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--borde);
+  }
+  .nav-wrap{max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:16px 24px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-mark{width:38px; height:38px; flex-shrink:0; object-fit:contain;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.05;}
+  .brand span{font-family:'Oswald'; font-weight:700; font-size:1.2rem; letter-spacing:0.04em;}
+  .brand small{font-family:'JetBrains Mono'; font-size:0.62rem; color:var(--linea); letter-spacing:0.12em; text-transform:uppercase;}
+  nav ul{list-style:none; display:flex; gap:28px;}
+  nav a{
+    font-size:0.85rem; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--gris);
+    position:relative; padding-bottom:4px;
+    transition:color .2s ease;
+  }
+  nav a.active, nav a:hover{color:var(--blanco);}
+  nav a::after{content:""; position:absolute; left:0; bottom:0; width:0; height:2px; background:var(--linea); transition:width .25s ease;}
+  nav a:hover::after, nav a.active::after{width:100%;}
+
+  .km{display:flex; align-items:center; gap:14px; margin-bottom:36px;}
+  .km-badge{
+    font-family:'JetBrains Mono'; font-weight:600; font-size:0.75rem;
+    color:var(--asfalto); background:var(--linea);
+    padding:4px 10px; white-space:nowrap;
+  }
+  .km-line{flex:1; height:0; border-top:2px dashed var(--borde);}
+
+  section{max-width:1100px; margin:0 auto; padding:80px 24px;}
+  section h2{font-size:2rem; margin-bottom:8px;}
+  .eyebrow{
+    color:var(--linea); font-family:'JetBrains Mono'; font-size:0.8rem;
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; display:block;
+  }
+  .lede{color:var(--gris); max-width:560px; margin-bottom:48px;}
+
+  .btn{
+    display:inline-block; padding:13px 26px;
+    font-family:'Oswald'; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.04em; font-size:0.9rem;
+    border:1px solid var(--blanco); transition:all .2s ease;
+  }
+  .btn-fill{background:var(--linea); border-color:var(--linea); color:var(--asfalto);}
+  .btn-fill:hover{background:var(--linea-2); border-color:var(--linea-2);}
+
+  .participantes-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:24px;}
+  .participante{text-align:center; cursor:pointer; background:none; border:none; color:inherit; font-family:inherit; padding:0;}
+  .avatar{
+    width:100%; aspect-ratio:1; background:var(--asfalto-2);
+    border:1px solid var(--borde); overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald'; font-weight:700; font-size:1.6rem; color:var(--linea);
+    margin-bottom:10px; transition:border-color .2s ease;
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover;}
+  .participante:hover .avatar{border-color:var(--linea);}
+  .participante .nombre{font-weight:600; font-size:0.95rem;}
+  .participante .rol{color:var(--gris); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;}
+
+  .ficha-overlay{
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(10,11,12,0.85); backdrop-filter:blur(4px);
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .ficha-overlay.open{display:flex;}
+  .ficha-card{
+    background:var(--asfalto-2); border:1px solid var(--borde);
+    max-width:640px; width:100%; max-height:88vh; overflow-y:auto;
+    display:grid; grid-template-columns:220px 1fr; position:relative;
+  }
+  .ficha-cerrar{
+    position:absolute; top:12px; right:12px; z-index:2;
+    background:var(--asfalto); border:1px solid var(--borde); color:var(--blanco);
+    width:34px; height:34px; cursor:pointer; font-size:1rem;
+  }
+  .ficha-foto{width:100%; height:100%; object-fit:cover; min-height:220px;}
+  .ficha-info{padding:28px;}
+  .ficha-info h3{font-size:1.5rem; margin:4px 0 14px;}
+  .ficha-bio{color:var(--gris); font-size:0.92rem; margin-bottom:18px;}
+  .ficha-gear .lbl{font-family:'JetBrains Mono'; font-size:0.68rem; color:var(--linea); text-transform:uppercase; letter-spacing:0.08em;}
+  .ficha-gear p{font-size:0.9rem; margin-top:4px;}
+  @media (max-width:520px){
+    .ficha-card{grid-template-columns:1fr;}
+    .ficha-foto{min-height:180px;}
+  }
+
+  footer{
+    max-width:1100px; margin:0 auto; padding:50px 24px 40px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+    border-top:1px solid var(--borde);
+  }
+  .meta-tag{font-family:'JetBrains Mono'; color:var(--gris); font-size:0.8rem;}
+
+  @media (max-width:800px){ nav ul{display:none;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand">
+      <img class="brand-mark" src="assets/logo.png" alt="Logo TPS BDN">
+      <div class="brand-text">
+        <span>TPS BDN</span>
+        <small>Badalona</small>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="rutas.html">Rutas</a></li>
+        <li><a href="participantes.html" class="active">El Pelotón</a></li>
+        <li><a href="galeria.html">Galería</a></li>
+        <li><a href="index.html#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="participantes">
+  <div class="km"><span class="km-badge">KM 20</span><div class="km-line"></div></div>
+  <span class="eyebrow">El pelotón</span>
+  <h2>El Pelotón</h2>
+  <p class="lede">Quiénes formamos la grupeta esta temporada.</p>
+  <div class="participantes-grid" id="participantes-grid"></div>
+
+  <div id="ficha-overlay" class="ficha-overlay">
+    <div class="ficha-card">
+      <button id="ficha-cerrar" class="ficha-cerrar" aria-label="Cerrar">✕</button>
+      <img id="ficha-foto" class="ficha-foto" src="" alt="">
+      <div class="ficha-info">
+        <span class="eyebrow" id="ficha-rol"></span>
+        <h3 id="ficha-nombre"></h3>
+        <p id="ficha-bio" class="ficha-bio"></p>
+        <div class="ficha-gear">
+          <span class="lbl">Equipamiento actual</span>
+          <p id="ficha-equipo"></p>
+        </div>
+        <a id="ficha-strava" href="#" target="_blank" rel="noopener" class="btn btn-fill" style="margin-top:18px; display:inline-block;">Ver perfil de Strava →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="meta-tag">© 2026 LA GRUPETA — HECHO SOBRE DOS RUEDAS</span>
+</footer>
+
+<script>
+  const participantes = [
+    {
+      nombre: "Jose Antonio",
+      rol: "El Capi",
+      foto: "assets/jose-antonio.jpeg",
+      strava: "https://www.strava.com/athletes/80859210",
+      bio: "El capitán de la grupeta. Marca el ritmo y decide por dónde rodamos.",
+      equipo: "Cube Attain C:62 · Garmin 840"
+    },
+    {
+      nombre: "Jordi Belda",
+      rol: "2º de a bordo",
+      foto: "assets/jordi-belda.jpeg",
+      strava: "https://www.strava.com/athletes/47178188",
+      bio: "Segundo al mando, siempre pendiente de que el grupo ruede compacto.",
+      equipo: "Megamo Pulse · Garmin 840"
+    },
+    {
+      nombre: "Jaime Del Bosque",
+      rol: "El Tesorero",
+      foto: "assets/jaime-del-bosque.jpeg",
+      strava: "https://www.strava.com/athletes/152686357",
+      bio: "Guarda las cuentas del grupo y no falla ni un sábado de ruta.",
+      equipo: "Merida Scultura 6000 · Bryton S810"
+    },
+    {
+      nombre: "Jordi \"El Del Mono\"",
+      rol: "El sinfin del grupo",
+      foto: "assets/Jordi-mono.jpg",
+      strava: "https://www.strava.com/athletes/1280440",
+      bio: "No para de hacer Km y ascender metros, el sinfin",
+      equipo: "Canyon · Garmin Edge Explorer"
+    },
+ {
+      nombre: "Jose Carlos",
+      rol: "La Ley",
+      foto: "assets/Josecarlos.jpeg",
+      strava: "https://www.strava.com/athletes/143781577",
+      bio: "Impone la Ley y Orden en la Grupeta, nadie se pasa un semaforo",
+      equipo: "Canyon AERO · Garmin 840"
+    },
+{
+      nombre: "Ivan",
+      rol: "El Viento",
+      foto: "assets/Ivan1.jpeg",
+      strava: "https://www.strava.com/athletes/3426410",
+      bio: "El viento y el son 1 solo",
+      equipo: "Trek Emonda · Wahoo"
+    },
+  ];
+
+  const grid = document.getElementById('participantes-grid');
+  participantes.forEach(function(p, i){
+    const card = document.createElement('button');
+    card.className = 'participante';
+    card.innerHTML =
+      '<div class="avatar">' +
+        (p.foto ? '<img src="' + p.foto + '" alt="' + p.nombre + '">' : p.nombre.split(' ').map(function(w){return w[0];}).join('')) +
+      '</div>' +
+      '<div class="nombre">' + p.nombre + '</div>' +
+      '<div class="rol">' + p.rol + '</div>';
+    card.addEventListener('click', function(){ abrirFicha(i); });
+    grid.appendChild(card);
+  });
+
+  const overlay = document.getElementById('ficha-overlay');
+  function abrirFicha(i){
+    const p = participantes[i];
+    document.getElementById('ficha-foto').src = p.foto || 'assets/logo.png';
+    document.getElementById('ficha-foto').alt = p.nombre;
+    document.getElementById('ficha-rol').textContent = p.rol;
+    document.getElementById('ficha-nombre').textContent = p.nombre;
+    document.getElementById('ficha-bio').textContent = p.bio;
+    document.getElementById('ficha-equipo').textContent = p.equipo;
+    document.getElementById('ficha-strava').href = p.strava;
+    overlay.classList.add('open');
+  }
+  document.getElementById('ficha-cerrar').addEventListener('click', function(){ overlay.classList.remove('open'); });
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) overlay.classList.remove('open'); });
+</script>
+</body>
+</html>
